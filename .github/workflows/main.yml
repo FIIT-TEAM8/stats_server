@@ -1,0 +1,54 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**/README.md'
+
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+          
+      #- name: Install dependencies
+      #  run: pip install pymongo
+      
+      #- name: Unit tests
+      #  run: python -m unittest discover -s test
+
+      - uses: mr-smithers-excellent/docker-build-push@v5
+        name: Build & push Docker image
+        with:
+          image: fiitteam8/stats_server
+          tags: v1, latest
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+    - name: Executing remote ssh docker deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_MACHINE }}
+        username: ${{ secrets.DEPLOY_USERNAME }}
+        password: ${{ secrets.DEPLOY_PASSWORD }}
+        script: |
+          cd /home/fiitkar/data_infrastructure
+          docker-compose pull flask_server && docker-compose --env-file env/elastic_infrastructure.env up -d --no-deps --build flask_server && docker system prune -f

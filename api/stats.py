@@ -11,8 +11,8 @@ from .elastic import Elastic
 DEFAULT_SIZE = 300
 
 
-# /stats_api/search/
-stats_blueprint = Blueprint("search_routes", __name__, url_prefix="/stats_api/")
+# /api/search/
+stats_blueprint = Blueprint("search_routes", __name__, url_prefix="/api/")
 
 elastic = Elastic()
 

@@ -25,7 +25,7 @@ if (not os.getenv('PRODUCTION')):
     print('RUNNING IN DEVELOPMENT ENV...')
     cors = CORS(app, supports_credentials=True)
 
-@app.route("/stats_api")
+@app.route("/")
 def root():
     return "<h1>some cool statistics :P</h1>"
 
