@@ -51,4 +51,4 @@ jobs:
         password: ${{ secrets.DEPLOY_PASSWORD }}
         script: |
           cd /home/fiitkar/data_infrastructure
-          docker-compose pull flask_server && docker-compose --env-file env/elastic_infrastructure.env up -d --no-deps --build flask_server && docker system prune -f
+          docker-compose pull stats_server && docker-compose --env-file env/elastic_infrastructure.env up -d --no-deps --build stats_server && docker system prune -f
