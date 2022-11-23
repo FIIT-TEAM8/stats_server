@@ -93,9 +93,10 @@ def get_stats(articles_meta):
 
     articles_crime = []
     for x in articles_by_crime:
-        a = {}
-        a[x] = articles_by_crime[x]
-        articles_crime.append(a)
+        temp = {}
+        temp["crime"] = x
+        temp["number"] = articles_by_crime[x]
+        articles_crime.append(temp)
 
     stats = {
         "articles_by_region": articles_by_region,
