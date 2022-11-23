@@ -58,6 +58,7 @@ def get_stats(articles_meta):
     articles_by_crime = {}
     articles_by_language = {}
     articles_by_date = {}
+    i = 0
 
     for article in articles_meta:
         
@@ -81,7 +82,8 @@ def get_stats(articles_meta):
         for crime in crimes:
             if crime not in articles_by_crime:
                 articles_by_crime[crime] = []
-            articles_by_crime[crime].append(article['_id'])
+            i += 1
+            articles_by_crime[crime] = i
 
     # sort results
     articles_by_region = dict(sorted(articles_by_region.items(), key=lambda i: -len(i[1])))
@@ -89,10 +91,16 @@ def get_stats(articles_meta):
     articles_by_crime = dict(sorted(articles_by_crime.items(), key=lambda i: -len(i[1])))
     articles_by_date = {k: v for k, v in sorted(articles_by_date.items(), key=lambda item: item[1], reverse=True)}
 
+    articles_crime = []
+    for x in articles_by_crime:
+        a = {}
+        a[x] = articles_by_crime[x]
+        articles_crime.append(a)
+
     stats = {
         "articles_by_region": articles_by_region,
         "articles_by_language": articles_by_language,
-        "articles_by_crime": articles_by_crime,
+        "articles_by_crime": articles_crime,
         "articles_by_date": articles_by_date,
     }
     return stats
