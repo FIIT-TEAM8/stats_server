@@ -3,10 +3,9 @@ import requests
 import json
 import api.api_settings as api_settings
 
-
+# first and last avaliable years when using date filter
 FIRST_YEAR = 2000
 LAST_YEAR = 2100
-
 
 
 # handle elasticsearch through requests library
@@ -119,3 +118,26 @@ class Elastic:
             verify=False, 
             auth=(api_settings.ES_USER, api_settings.ES_PASSWORD))
         return response.json()
+
+
+    # search articles by ids
+    def search_by_ids(self, ids, page_num, size):
+    
+        query = {
+            "from": str(page_num * size - size), 
+            "size": str(size),
+            "query": {
+                "terms": {
+                    "_id": ids 
+                }
+            }
+        }
+
+        response = requests.get(api_settings.ES_SEARCH_STRING, 
+            headers={},
+            json=query,
+            verify=False,
+            auth=(api_settings.ES_USER, api_settings.ES_PASSWORD))
+
+        results = response.json()
+        return results

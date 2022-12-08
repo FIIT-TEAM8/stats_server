@@ -9,6 +9,11 @@ API_RESULT_SIZE = "size"
 API_KEYWORDS = "keywords"
 API_REGIONS = "regions"
 
+# articles endpoint
+API_IDS = "ids"
+API_PAGE_NUM = "page"
+API_PAGE_SIZE = "size"
+
 # environmental variables
 ES_HOST = str(os.getenv('ES_HOST') or 'localhost')
 ES_PORT = str(os.getenv('ES_PORT') or 9200)
