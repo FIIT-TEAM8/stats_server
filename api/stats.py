@@ -65,7 +65,7 @@ def get_stats(articles_meta):
     for article in articles_meta:
         
         # sorted by date
-        articles_by_date[article['_id']] = transform_date(article['_source']['published'][0])
+        articles_by_date[article['_id']] = transform_date(article['_source']['published'])
 
         # count articles by country
         region = article['_source']['region']

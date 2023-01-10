@@ -57,14 +57,23 @@ class Elastic:
 
     # builds elasticsearch query with or without filters
     def build_query(self, query, categories, regions, search_from, search_to, size):
-        
-        # load default body of query withou any filters
-        with open('default_stats_query.json', encoding='utf8') as file:
-            self.body = json.load(file)
-      
-        # replace placeholder values
-        self.body['size'] = self.body['size'].replace('$size', str(size))
-        self.body['query']['bool']['must'][0]['multi_match']['query'] = self.body['query']['bool']['must'][0]['multi_match']['query'].replace('$query', query)
+        self.body = {
+            "_source": ["keywords", "region", "language", "published", "link"],
+            "size": str(size),
+            "query": {
+                "bool": {
+                    "must": [{
+                        "multi_match": {
+                            "query": query,
+                            "type": "phrase", 
+                            "fields": [
+                                "html"
+                            ]
+                        }
+                    }]
+                }
+            }
+        }
 
         # add crime keywords filter
         if categories:
